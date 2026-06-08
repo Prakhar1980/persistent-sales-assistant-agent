@@ -2,7 +2,7 @@
 
 A TypeScript/Express backend for a persistent sales assistant. It remembers users in MongoDB, searches a small product catalog, generates a sales response, evaluates that response, and stores the full conversation/eval trail.
 
-Live URL: `https://your-railway-url.up.railway.app`
+Live URL: `https://your-deployed-url.vercel.app`
 
 ## Tech Stack
 
@@ -12,7 +12,7 @@ Live URL: `https://your-railway-url.up.railway.app`
 - MongoDB + Mongoose
 - OpenAI SDK
 - Zod
-- Railway
+- Vercel / Railway
 
 ## Architecture
 
@@ -231,18 +231,57 @@ If using the long MongoDB Atlas standard connection string, keep the same databa
 MONGODB_URI=mongodb://<username>:<password>@host1:27017,host2:27017,host3:27017/persistent-sales-assistant-agent?ssl=true&replicaSet=<replica-set>&authSource=admin&appName=<app-name>
 ```
 
+## Vercel Deployment
+
+Vercel runs this project through `api/index.ts`, which adapts the Express app to a serverless function. Local development still uses `src/server.ts`.
+
+Steps:
+
+1. Push this project to GitHub.
+2. Go to [https://vercel.com](https://vercel.com).
+3. Click **Add New** -> **Project**.
+4. Import the GitHub repo.
+5. Keep the framework preset as **Other**.
+6. Add the environment variables listed below.
+7. Click **Deploy**.
+
+Vercel reads `vercel.json` and routes all requests to:
+
+```text
+api/index.ts
+```
+
+## Vercel Environment Variables
+
+Add these in Vercel project settings:
+
+```env
+NODE_ENV=production
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/persistent-sales-assistant-agent?retryWrites=true&w=majority
+OPENAI_API_KEY=<your-openai-api-key>
+OPENAI_MODEL=gpt-4.1-mini
+```
+
+Do not add `PORT` on Vercel. Serverless functions do not listen on a port.
+
+If your MongoDB Atlas URI uses the longer replica-set format, this is also fine:
+
+```env
+MONGODB_URI=mongodb://<username>:<password>@host1:27017,host2:27017,host3:27017/persistent-sales-assistant-agent?ssl=true&replicaSet=<replica-set>&authSource=admin&appName=<app-name>
+```
+
 ## Curl Commands for Deployed API
 
-Set your deployed URL once:
+Set your deployed URL once. This works for Vercel, Railway, or Render:
 
 ```bash
-BASE_URL="https://your-railway-url.up.railway.app"
+BASE_URL="https://your-deployed-url.vercel.app"
 ```
 
 PowerShell:
 
 ```powershell
-$env:BASE_URL="https://your-railway-url.up.railway.app"
+$env:BASE_URL="https://your-deployed-url.vercel.app"
 ```
 
 Health:
@@ -297,7 +336,8 @@ curl -X DELETE "$BASE_URL/chat/demo-user/memory"
 - Catalog search is keyword-based. With only three plans, semantic search would add more moving parts than value.
 - The fallback response/eval path keeps demos running when OpenAI quota is missing. In a real app, I would show a clearer degraded-mode status in admin logs.
 - Conversation history is returned all at once. For larger usage, this should be paginated.
-- The app logs errors to the console because Railway captures stdout/stderr. A production team would likely add structured logging and request IDs.
+- The app logs errors to the console because Vercel/Railway capture stdout and stderr. A production team would likely add structured logging and request IDs.
+- Vercel serverless functions are fine for an assignment demo, but they are not the same as a long-running Node server. Cold starts can happen, and very long LLM calls may hit function limits.
 - There is no frontend because the assignment only asks for the backend API.
 
 ## 2-3 Minute Demo Video Script
@@ -321,5 +361,4 @@ curl -X DELETE "$BASE_URL/chat/demo-user/memory"
    "Finally I call `/evals` to show aggregate quality metrics, then `/memory` with DELETE to clear the user's history, eval logs, and flags."
 
 7. Closing, 10 seconds:
-   "The project is Railway-ready with `railway.json`, environment variables documented in the README, and fallback behavior if OpenAI is unavailable."
-
+   "The project is ready for Vercel using `vercel.json`, and it also keeps a Railway config. Environment variables are documented in the README, and fallback behavior keeps the demo working if OpenAI is unavailable."
