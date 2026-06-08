@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 import { env } from "../config/env.js";
 import { CatalogSearchResult } from "./catalog.service.js";
 import { MemoryMessage } from "../memory/memoryRepository.js";
