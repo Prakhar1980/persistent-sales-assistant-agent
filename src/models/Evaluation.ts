@@ -15,5 +15,5 @@ const evaluationSchema = new mongoose.Schema(
 
 export type EvaluationDocument = InferSchemaType<typeof evaluationSchema>;
 
-export const Evaluation = mongoose.model("Evaluation", evaluationSchema);
-
+export const Evaluation =
+  mongoose.models.Evaluation || mongoose.model("Evaluation", evaluationSchema);

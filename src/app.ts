@@ -15,6 +15,21 @@ app.use((_req, _res, next) => {
   connectDatabase().then(() => next()).catch(next);
 });
 
+app.get("/", (_req, res) => {
+  res.json({
+    name: "persistent-sales-assistant-agent",
+    status: "ok",
+    endpoints: [
+      "GET /health",
+      "GET /catalog",
+      "POST /chat/:userId",
+      "GET /chat/:userId/history",
+      "GET /chat/:userId/evals",
+      "DELETE /chat/:userId/memory"
+    ]
+  });
+});
+
 app.use(healthRouter);
 app.use(catalogRouter);
 app.use(chatRouter);

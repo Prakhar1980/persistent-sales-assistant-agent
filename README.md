@@ -63,6 +63,7 @@ src/
 
 | Method | Route | Purpose |
 | --- | --- | --- |
+| `GET` | `/` | Basic service info and endpoint list |
 | `POST` | `/chat/:userId` | Chat with the assistant |
 | `GET` | `/chat/:userId/history` | Get saved conversation history |
 | `DELETE` | `/chat/:userId/memory` | Clear user history, evals, and flags |

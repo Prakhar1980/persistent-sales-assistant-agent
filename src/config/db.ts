@@ -12,7 +12,13 @@ export async function connectDatabase(): Promise<void> {
   mongoose.set("strictQuery", true);
 
   connectionPromise ??= mongoose.connect(env.MONGODB_URI);
-  await connectionPromise;
+
+  try {
+    await connectionPromise;
+  } catch (error) {
+    connectionPromise = null;
+    throw error;
+  }
 
   logger.info("MongoDB connected");
 }

@@ -12,5 +12,5 @@ const conversationSchema = new mongoose.Schema(
 
 export type ConversationDocument = InferSchemaType<typeof conversationSchema>;
 
-export const Conversation = mongoose.model("Conversation", conversationSchema);
-
+export const Conversation =
+  mongoose.models.Conversation || mongoose.model("Conversation", conversationSchema);

@@ -12,5 +12,5 @@ const humanFlagSchema = new mongoose.Schema(
 
 export type HumanFlagDocument = InferSchemaType<typeof humanFlagSchema>;
 
-export const HumanFlag = mongoose.model("HumanFlag", humanFlagSchema);
-
+export const HumanFlag =
+  mongoose.models.HumanFlag || mongoose.model("HumanFlag", humanFlagSchema);
