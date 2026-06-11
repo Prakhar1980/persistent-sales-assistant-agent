@@ -1,4 +1,4 @@
-# persistent-sales-assistant-agent
+# Persistent-sales-assistant-agent
 
 Backend API for a persistent sales assistant. The service stores conversation memory in MongoDB, searches a small product catalog, generates sales responses with OpenAI, evaluates each response, and records escalation flags when a human should step in.
 
